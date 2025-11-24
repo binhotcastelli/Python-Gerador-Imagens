@@ -1,4 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont
+import pandas as pd
 import os
 import sys
 from pathlib import Path
@@ -13,10 +14,20 @@ class ImageGenerator:
         self.config = IMAGE_CONFIG
         
     def load_template(self, template_name):
-        """Carrega imagem template"""
+        template_name = str(template_name).strip() if pd.notna(template_name) else "template_basico.jpg"
+    
+        if not template_name:
+            template_name = "template_basico.jpg"
+
         template_path = TEMPLATES_DIR / template_name
+
+        if not template_path.exists():
+            template_name = "template_basico.jpg"
+            template_path = TEMPLATES_DIR / template_name
+        
         if not template_path.exists():
             raise FileNotFoundError(f"Template não encontrado: {template_name}")
+        
         return Image.open(template_path)
     
     def add_text_to_image(self, image, text, position, font_size, color):
