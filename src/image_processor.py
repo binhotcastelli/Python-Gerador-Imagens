@@ -14,14 +14,19 @@ class ImageGenerator:
         return Image.open(template_path)
     
     def add_text_to_image(self, image, text, position, font_size, color):
-        """Adiciona texto à imagem"""
         draw = ImageDraw.Draw(image)
         
         try:
-            font = ImageFont.truetype(self.config['default_font'], font_size)
+            # Tenta fonte do sistema
+            font = ImageFont.truetype("arial.ttf", font_size)
         except:
-            font = ImageFont.load_default()
-            
+            try:
+                # Fallback para fontes comuns
+                font = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", font_size)
+            except:
+                # Último fallback
+                font = ImageFont.load_default()
+                
         draw.text(position, text, fill=color, font=font)
         return image
     

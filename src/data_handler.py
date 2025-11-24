@@ -1,6 +1,12 @@
 import pandas as pd
 import os
-from .config import INPUT_DIR
+import sys
+from pathlib import Path
+
+# Adiciona src ao path para import absoluto
+sys.path.append(str(Path(__file__).parent))
+
+from config import INPUT_DIR
 
 class DataHandler:
     def __init__(self):
