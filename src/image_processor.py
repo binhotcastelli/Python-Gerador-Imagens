@@ -1,6 +1,12 @@
 from PIL import Image, ImageDraw, ImageFont
 import os
-from .config import TEMPLATES_DIR, OUTPUT_DIR, IMAGE_CONFIG
+import sys
+from pathlib import Path
+
+# Adiciona src ao path para import absoluto
+sys.path.append(str(Path(__file__).parent))
+
+from config import TEMPLATES_DIR, OUTPUT_DIR, IMAGE_CONFIG
 
 class ImageGenerator:
     def __init__(self):
@@ -14,17 +20,15 @@ class ImageGenerator:
         return Image.open(template_path)
     
     def add_text_to_image(self, image, text, position, font_size, color):
+        """Adiciona texto à imagem"""
         draw = ImageDraw.Draw(image)
         
         try:
-            # Tenta fonte do sistema
             font = ImageFont.truetype("arial.ttf", font_size)
         except:
             try:
-                # Fallback para fontes comuns
                 font = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", font_size)
             except:
-                # Último fallback
                 font = ImageFont.load_default()
                 
         draw.text(position, text, fill=color, font=font)
@@ -64,7 +68,7 @@ class ImageGenerator:
             
             image = self.add_text_to_image(
                 image, 
-                f"R$ {product_data['preco']:.2f}", 
+                f"R$ {float(product_data['preco']):.2f}", 
                 self.config['positions']['preco'],
                 self.config['font_sizes']['preco'],
                 self.config['colors']['highlight']
